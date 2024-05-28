@@ -15,7 +15,10 @@ async def lifespan(_: FastAPI):
                               'C://Users//ASUS//Desktop//IR//dataset_ir//quora_docs.csv',
                               'C://Users//ASUS//Desktop//IR//dataset_ir//quora_queries.csv',
                               'C://Users//ASUS//Desktop//IR//dataset_ir//quora_grels.csv')
-    # lotte_engine = CoreEngine(0.01, 0.9, 'C://Users//Dell//Desktop//dataset_ir//lotte_docs.csv')
+    lotte_engine = CoreEngine(0.01, 0.9,
+                              'C://Users//ASUS//Desktop//IR//dataset_ir//lotte_docs.csv',
+                              'C://Users//ASUS//Desktop//IR//dataset_ir//lotte_queries.csv',
+                              'C://Users//ASUS//Desktop//IR//dataset_ir//lotte_grels.csv')
     yield
     del quora_engine
     del lotte_engine
@@ -33,8 +36,8 @@ def read_hello():
 def read_data(query: Union[str], type: Union[int]):
     if type == 1:
         return quora_engine.search(query)
-    # else:
-    #     return lotte_engine.search(query)
+    else:
+        return lotte_engine.search(query)
 
 
 @app.get("/evaluation")
