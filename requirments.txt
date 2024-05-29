@@ -1,0 +1,6 @@
+pip install fsspec
+pip install panda
+pip install fastapi
+pip install uvicorn
+pip install nltk
+pip install Jinja2

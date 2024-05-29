@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        .search {
+            margin-left: 340px;
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        select[type="number"] {
+            width: 50%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #customers {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #customers td, #customers th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #customers tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #customers tr:hover {
+            background-color: #ddd;
+        }
+
+        #customers th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #04AA6D;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="search">
+        <h1>Search Engine</h1>
+        <form id="searchForm">
+            <label for="query">Query:</label>
+            <input type="text" id="query" name="query" required>
+            <br>
+            <label for="type">Dataset:</label>
+            <select type="number" id="type" name="type" required>
+                <option value="1">quora</option>
+                <option value="2">lotte</option>
+            </select>
+            <br>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+    <div id="result"></div>
+</div>
+
+<script>
+    document.getElementById("searchForm").addEventListener("submit", async function (event) {
+        event.preventDefault(); // Prevent form submission
+
+        const query = document.getElementById("query").value;
+        const type = parseInt(document.getElementById("type").value);
+
+        try {
+            const response = await fetch(`/search?query=${query}&type=${type}`);
+            const data = await response.json();
+
+            // Clear any existing table
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = "";
+
+            // Create a new table to display the API response
+            const table = document.createElement("table");
+            const tbody = document.createElement("tbody");
+            table.id = "customers";
+
+            data.forEach(item => {
+                const row = document.createElement("tr");
+                const docIdCell = document.createElement("td");
+                const contentCell = document.createElement("td");
+
+                docIdCell.textContent = item.doc_id;
+                contentCell.textContent = item.content;
+
+                row.appendChild(docIdCell);
+                row.appendChild(contentCell);
+                tbody.appendChild(row);
+            });
+
+            table.appendChild(tbody);
+            resultDiv.appendChild(table);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    });
+</script>
+</body>
+</html>
